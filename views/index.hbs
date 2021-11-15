@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список пользователей</title>
+    <meta charset="utf-8" />
+    <script src="https://use.fontawesome.com/c6aaffe9f5.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+    <container class="row">
+        <div class="col s1"></div>
+        <table class="col s10 striped highlight centered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>monday</th>
+                    <th>tuesday</th>
+                    <th>wednesday</th>
+                    <th>thursday</th>
+                    <th>friday</th>
+                    <th>saturday</th>
+                    <th>sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each project}}
+                <tr id="{{this.idproject}}_project" value="{{this.idproject}}">
+                    <td>
+                        <div id='{{this.idproject}}_projectname' style="display: inline;">
+                            {{this.project_name}}
+                        </div>
+                        <button class="waves-effect waves-light btn-small" id="{{this.idproject}}_projectnameChange" onclick="projectEdit({{this.idproject}})">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                        <button class="waves-effect waves-light btn-small" onclick="projectDelete({{this.idproject}})" type="submit">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <select  id="project_monday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_monday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="project_tuesday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_tuesday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="project_wednesday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_wednesday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="project_thursday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_thursday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select value="28" id="project_friday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_friday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="project_saturday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_saturday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="project_sunday" class="browser-default">
+                            {{#each ../users}}
+                            {{#if_eq this.idusers ../this.project_sunday}}
+                                <option value="{{this.idusers}}" selected>{{this.name}}</option>
+                            {{else}}
+                                <option value="{{this.idusers}}">{{this.name}}</option>
+                            {{/if_eq}}
+                            {{/each}}
+                        </select>
+                    </td>
+                </tr>
+                {{/each}}
+                <tr style="display: none;" id="newProjectRow">
+                    <td>
+                        <form method="POST" id="addProjectForm" style="display: inline;">
+                            <input name="projectname" id="new_project_field">
+                        </form>
+                    </td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col s1"></div>
+    </container>
+    <container class="row">
+        <button class="col s10 offset-s1 waves-effect waves-light btn-large" type="submit" id="add_project"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    </container>
+    <container class="row">
+        <div class="col s1"></div>
+        <div class="col s10">
+            <h5>Список пользователей</h5>
+            <div id="userList" style="display:inline">
+                {{#each users}}
+                    <div style="display: inline" id="{{this.idusers}}_user">
+                        <div style="display:inline" id="{{this.idusers}}_username">
+                            <span>{{this.name}}</span>
+                        </div>
+                        <button class="waves-effect waves-light btn-small" id="{{this.idusers}}_usernameChange" onclick="user_edit({{this.idusers}})">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                        <button class="waves-effect waves-light btn-small" onclick="user_delete({{this.idusers}})" type="submit">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                {{/each}}
+            </div>
+            <button class="waves-effect waves-light btn-small" name="addUserForm" type="submit" id="add_user">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+            <form method="POST" id="addUserForm" style="display: inline;">
+                <input name="username" id="add_user_field" style="display: none; width: 10%; height: 1.3rem">
+            </form>
+        </div>
+    </container>
+
+</body>
+<script>
+    // Add user button
+    document.getElementById("add_user").onclick = function () {
+        document.getElementById("add_user_field").style.display = "inline";
+        document.getElementById("add_user").style.display = "none";
+    }
+
+    // Add user form field
+    document
+        .getElementById('addUserForm')
+        .addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Create request
+            let registerForm = document.forms['addUserForm'];
+            let username = registerForm.elements['username'].value;
+            let user = JSON.stringify({
+                username: username,
+            })
+            let request = new XMLHttpRequest();
+            request.open('POST', '/add_user', true);
+            request.setRequestHeader(
+                'Content-Type',
+                'application/json'
+            );
+            // Response
+            request.addEventListener('load', function () {
+                let receivedUser = JSON.parse(request.response);
+                // Add user html
+                document.getElementById("userList").insertAdjacentHTML('beforeend', `
+                    <div style="display:inline" id="${receivedUser.insertId}_user">
+                        <div style="display:inline" id="${receivedUser.insertId}_username">
+                            <span>${receivedUser.username}</span>
+                        </div>
+                        <button class="waves-effect waves-light btn-small" id="${receivedUser.insertId}_usernameChange" onclick="user_edit(${receivedUser.insertId})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button class="waves-effect waves-light btn-small" onclick="user_delete(${receivedUser.insertId})" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </div>
+                `);
+                // Add user in selects
+                userSelects = Array.from(document.getElementsByClassName("browser-default"))
+                userSelects.forEach(userSelect => {  
+                    userSelect.insertAdjacentHTML('beforeend',`<option value="${receivedUser.insertId}">${receivedUser.username}</option>`)
+                });
+                // Disable user add field
+                document.getElementById("add_user_field").style.display = "none";
+                document.getElementById("add_user").style.display = "inline";
+            });       
+            request.send(user)
+        });
+
+    // Delete user
+    function user_delete(userid) {
+        // Create request
+        let user = JSON.stringify({ userid: userid });
+        let request = new XMLHttpRequest();
+        request.open("DELETE", '/delete_user', true);
+        request.setRequestHeader(
+            'Content-Type',
+            'application/json'
+        );
+        // Delete user in selects
+        document.getElementById(userid + "_user").remove();
+        request.send(user);
+        userSelects = Array.from(document.getElementsByClassName("browser-default"));
+        userSelects.forEach(userSelect => {
+            options = Array.from(userSelect.getElementsByTagName("option"));
+            options.forEach(option => {
+                if(option.value == userid){
+                    option.remove();
+                };
+            });
+        });
+    }
+
+    // edit user
+    function user_edit(userid) {
+        // Display change user input 
+        userBlock = document.getElementById(userid + "_username")
+        userBlock.innerHTML = "<input id='changeUserField' value='" + userBlock.innerText.trim() + "'style='display: inline; width: 10%; height: 1.3rem'>"
+        changeUsernameField = document.getElementById("changeUserField");
+        changeUsernameField.focus();
+        document.getElementById(userid + "_usernameChange").style.display = "none";
+        changeUsernameField.onchange = function () {
+            // Create request
+            let user = JSON.stringify({
+                userid: userid,
+                username: changeUsernameField.value
+            });
+            let request = new XMLHttpRequest();
+            request.open("PUT", '/edit_user', true);
+            request.setRequestHeader(
+                'Content-Type',
+                'application/json'
+            );
+            request.send(user);
+            // Disable change user input
+            document.getElementById(userid + "_usernameChange").style.display = "inline";
+            userBlock.innerHTML = "<span>" + changeUsernameField.value + "</span>";
+            // Change user in select
+            userSelects = Array.from(document.getElementsByClassName("browser-default"));
+            userSelects.forEach(userSelect => {
+                options = Array.from(userSelect.getElementsByTagName("option"));
+                options.forEach(option => {
+                    if(option.value == userid){
+                        option.innerText = changeUsernameField.value.trim();
+                    }
+                });
+            });            
+        }
+    }
+
+    //PROJECT REQUESTS
+    // Add project button
+    document.querySelector("#add_project").onclick = function () {
+        document.querySelector("#newProjectRow").style.display = "table-row";
+    }
+    // Add project
+    document
+        .getElementById('addProjectForm')
+        .addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Create request
+            let registerForm = document.forms['addProjectForm'];
+            let projectname = registerForm.elements['projectname'].value;
+            let project = JSON.stringify({
+                projectname: projectname,
+            })
+            let request = new XMLHttpRequest();
+            request.open('POST', '/add_project', true);
+            request.setRequestHeader(
+                'Content-Type',
+                'application/json'
+            );
+            request.addEventListener('load', function () {
+                // Create request
+                let receivedProject = JSON.parse(request.response);
+                // Add project html
+                document.getElementById("newProjectRow").insertAdjacentHTML('beforebegin', `
+            <tr id = "${receivedProject.insertId}_project">
+               <td>
+                    <div id='${receivedProject.insertId}_projectname' style="display: inline;">
+                        ${projectname}
+                    </div>
+                    <button class="waves-effect waves-light btn-small" id="${receivedProject.insertId}_projectnameChange" onclick="projectEdit(${receivedProject.insertId})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button class="waves-effect waves-light btn-small" onclick="projectDelete(${receivedProject.insertId})" type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </td>
+                <td>
+                    <select id="project_monday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select id="project_tuesday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select id="project_wednesday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select id="project_thursday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select value="28" id="project_friday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select id="project_saturday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td>
+                    <select id="project_sunday" class="browser-default">
+                        {{#each users}}
+                            <option value="{{this.idusers}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+            </tr>`);
+            updateSelects()
+            });
+            request.send(project);
+            // Disable project add field
+            document.getElementById("add_user_field").style.display = "none";
+            document.querySelector("#add_user").style.display = "inline";
+            document.getElementById("newProjectRow").style.display = "none";
+        })
+
+    // delete project
+    function projectDelete(projectid) {
+        // Create request
+        let project = JSON.stringify({ projectid: projectid });
+        let request = new XMLHttpRequest();
+        request.open("DELETE", '/delete_project', true);
+        request.setRequestHeader(
+            'Content-Type',
+            'application/json'
+        );
+        // Remove project row
+        document.getElementById(projectid + "_project").remove();
+        request.send(project);
+    }
+
+    // edit project
+    function projectEdit(projectid) {
+        //Change project name on field
+        projectBlock = document.getElementById(projectid + "_projectname");
+        projectBlock.innerHTML = "<input id='changeProjectField' value='" + projectBlock.innerText.trim() + "'style='display: inline; width: 50%; height: 1.3rem'>";
+        changeProjectnameField = document.getElementById("changeProjectField");
+        changeProjectnameField.focus();
+        document.getElementById(projectid + "_projectnameChange").style.display = "none";
+        changeProjectnameField.onchange = function () {
+            //Create request
+            let project = JSON.stringify({
+                projectid: projectid,
+                projectname: changeProjectnameField.value
+            });
+            let request = new XMLHttpRequest();
+            request.open("PUT", '/edit_project', true);
+            request.setRequestHeader(
+                'Content-Type',
+                'application/json'
+            )
+            request.send(project)
+            // Create project name field on projectname span
+            document.getElementById(projectid + "_projectnameChange").style.display = "inline"
+            projectBlock.innerHTML = "<span>" + changeProjectnameField.value + "</span>"
+        }
+    }
+    // Change user select in project 
+    function updateSelects (){
+        selects = Array.from(document.getElementsByTagName("select"))
+        selects.forEach(select =>{
+            select.addEventListener("change", function(e){
+                day = e.target.id;
+                user = e.target.value
+                projectid = parseInt(e.target.parentElement.parentElement.id.replace(/\D+/g,""));
+                let change_day = JSON.stringify({
+                    day: day,
+                    user: user,
+                    projectid: projectid,
+                })
+                let request = new XMLHttpRequest()
+                request.open("PUT", '/change_project_user', true)
+                request.setRequestHeader(
+                    'Content-Type',
+                    'application/json'
+                )
+                request.send(change_day)
+            })
+        })
+    }
+    updateSelects()
+</script>
+<html>
