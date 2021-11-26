@@ -36,7 +36,11 @@ router.get("/", function(req, res){
 
 // USRERS REQUESTS
 router.post('/add_user', jsonParser, function (request, response) {
-  if (!request.body) return response.sendStatus(400)
+  if (!request.body) return response.sendStatus(400);
+  if (!request.body.username.trim()) {
+    request.body.error = 1405
+    return response.json(request.body)
+  } 
   connection.query("INSERT INTO users (name) VALUE (?)", request.body.username, function(err, results) {
     if (err) {
       request.body.error = err.errno;
@@ -58,6 +62,10 @@ router.delete('/delete_user', jsonParser, function(request, response) {
 
 router.put('/edit_user', jsonParser, function(request, response){
   if(!request.body) return response.sendStatus(400);
+  if (!request.body.username.trim()) {
+    request.body.error = 1405
+    return response.json(request.body)
+  } 
   connection.query("UPDATE users SET name=? WHERE idusers=?", [request.body.username,request.body.userid], function(err, data){
     if (err) {
       console.log(err);
@@ -72,6 +80,10 @@ router.put('/edit_user', jsonParser, function(request, response){
 // PROJECT REQUESTS
 router.post('/add_project', jsonParser, function (request, response) {
   if (!request.body) return response.sendStatus(400)
+  if (!request.body.projectname.trim()) {
+    request.body.error = 1405
+    return response.json(request.body)
+  } 
   connection.query("INSERT INTO project (project_name) VALUE (?)", request.body.projectname, function(err, results) {
     if (err) {
       request.body.error = err.errno;
@@ -93,6 +105,10 @@ router.delete('/delete_project', jsonParser, function(request, response) {
 
 router.put('/edit_project', jsonParser, function(request, response){
   if(!request.body) return response.sendStatus(400);
+  if (!request.body.projectname.trim()) {
+    request.body.error = 1405
+    return response.json(request.body)
+  } 
   connection.query("UPDATE project SET project_name=? WHERE idproject=?", [request.body.projectname,request.body.projectid], function(err, data){
     if (err) {
       request.body.error = err.errno;

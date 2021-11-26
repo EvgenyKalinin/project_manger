@@ -145,6 +145,7 @@
             <h5>Список пользователей</h5>
             <div id="userList" style="display:inline">
                 {{#each users}}
+                    {{#if this.name}}
                     <div style="display: inline" id="{{this.idusers}}_user" class="user">
                         <div style="display:inline" id="{{this.idusers}}_username">
                             <span>{{this.name}}</span>
@@ -156,6 +157,8 @@
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
+                    {{else}}
+                    {{/if}}
                 {{/each}}
             </div>
             <button class="waves-effect waves-light btn-small" name="addUserForm" type="submit" id="add_user">
@@ -198,6 +201,10 @@
                 if (receivedUser.error){
                     if (receivedUser.error==1406){
                         M.toast({html: 'Username soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                    if (receivedUser.error==1405){
+                        M.toast({html: 'Project name cannot be empty.', classes: 'rounded'});
                         return    
                     }
                 }
@@ -274,6 +281,10 @@
                         M.toast({html: 'Username soo long. Max Length 45 symbol.', classes: 'rounded'});
                         return    
                     }
+                    if (receivedUser.error==1405){
+                        M.toast({html: 'Project name cannot be empty.', classes: 'rounded'});
+                        return    
+                    }
                 }
                 // Disable change user input
                 document.getElementById(userid + "_usernameChange").style.display = "inline";
@@ -318,9 +329,14 @@
             request.addEventListener('load', function () {
                 // Create request
                 let receivedProject = JSON.parse(request.response);
+                console.log(receivedProject);
                 if (receivedProject.error){
                     if (receivedProject.error==1406){
                         M.toast({html: 'Projectname soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                    if (receivedProject.error==1405){
+                        M.toast({html: 'Project name cannot be empty.', classes: 'rounded'});
                         return    
                     }
                 }
@@ -434,6 +450,10 @@
                 if (receivedProject.error){
                     if (receivedProject.error==1406){
                         M.toast({html: 'Projectname soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                    if (receivedProject.error==1405){
+                        M.toast({html: 'Project name cannot be empty.', classes: 'rounded'});
                         return    
                     }
                 }
