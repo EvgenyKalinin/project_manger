@@ -145,7 +145,7 @@
             <h5>Список пользователей</h5>
             <div id="userList" style="display:inline">
                 {{#each users}}
-                    <div style="display: inline" id="{{this.idusers}}_user">
+                    <div style="display: inline" id="{{this.idusers}}_user" class="user">
                         <div style="display:inline" id="{{this.idusers}}_username">
                             <span>{{this.name}}</span>
                         </div>
@@ -436,6 +436,19 @@
             })
         })
     }
-    updateSelects()
+    updateSelects();
 </script>
+<style>
+.btn-small {
+    border-radius: 30px;
+    padding: 3px;
+    height: 25px;
+    line-height: 15px;
+    width: 25px;
+    font-size: 13px;
+}
+.user {
+    padding: 5px;
+}
+</style>
 <html>
