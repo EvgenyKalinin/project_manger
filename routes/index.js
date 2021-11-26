@@ -38,7 +38,11 @@ router.get("/", function(req, res){
 router.post('/add_user', jsonParser, function (request, response) {
   if (!request.body) return response.sendStatus(400)
   connection.query("INSERT INTO users (name) VALUE (?)", request.body.username, function(err, results) {
-    if(err) console.log(err);
+    if (err) {
+      request.body.error = err.errno;
+      response.json(request.body);
+      return
+    }
     request.body.insertId = results["insertId"]
     response.json(request.body)
   });
@@ -47,7 +51,7 @@ router.post('/add_user', jsonParser, function (request, response) {
 router.delete('/delete_user', jsonParser, function(request, response) {
   if (!request.body) return response.sendStatus(400)
   connection.query("DELETE FROM users WHERE idusers=?", request.body.userid, function(err, data) {
-    if(err) return console.log(err);
+    if (err) return console.log(err);
   });
   response.json(request.body)
 })
@@ -55,16 +59,25 @@ router.delete('/delete_user', jsonParser, function(request, response) {
 router.put('/edit_user', jsonParser, function(request, response){
   if(!request.body) return response.sendStatus(400);
   connection.query("UPDATE users SET name=? WHERE idusers=?", [request.body.username,request.body.userid], function(err, data){
-    if(err) return console.log(err);
+    if (err) {
+      console.log(err);
+      request.body.error = err.errno;
+      response.json(request.body);
+      return
+    }
+    response.json(request.body)
   })
-  response.json(request.body)
 })
 
 // PROJECT REQUESTS
 router.post('/add_project', jsonParser, function (request, response) {
   if (!request.body) return response.sendStatus(400)
   connection.query("INSERT INTO project (project_name) VALUE (?)", request.body.projectname, function(err, results) {
-    if(err) console.log(err);
+    if (err) {
+      request.body.error = err.errno;
+      response.json(request.body);
+      return
+    }
     request.body.insertId = results["insertId"]
     response.json(request.body)
   });
@@ -81,9 +94,13 @@ router.delete('/delete_project', jsonParser, function(request, response) {
 router.put('/edit_project', jsonParser, function(request, response){
   if(!request.body) return response.sendStatus(400);
   connection.query("UPDATE project SET project_name=? WHERE idproject=?", [request.body.projectname,request.body.projectid], function(err, data){
-    if(err) return console.log(err);
+    if (err) {
+      request.body.error = err.errno;
+      response.json(request.body);
+      return
+    }
+    response.json(request.body)
   })  
-  response.json(request.body)
 })
 
 router.put('/change_project_user', jsonParser, function(request, response){

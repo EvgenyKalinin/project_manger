@@ -195,6 +195,12 @@
             // Response
             request.addEventListener('load', function () {
                 let receivedUser = JSON.parse(request.response);
+                if (receivedUser.error){
+                    if (receivedUser.error==1406){
+                        M.toast({html: 'Username soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                }
                 // Add user html
                 document.getElementById("userList").insertAdjacentHTML('beforeend', `
                     <div style="display:inline" id="${receivedUser.insertId}_user">
@@ -261,20 +267,29 @@
                 'Content-Type',
                 'application/json'
             );
-            request.send(user);
-            // Disable change user input
-            document.getElementById(userid + "_usernameChange").style.display = "inline";
-            userBlock.innerHTML = "<span>" + changeUsernameField.value + "</span>";
-            // Change user in select
-            userSelects = Array.from(document.getElementsByClassName("browser-default"));
-            userSelects.forEach(userSelect => {
-                options = Array.from(userSelect.getElementsByTagName("option"));
-                options.forEach(option => {
-                    if(option.value == userid){
-                        option.innerText = changeUsernameField.value.trim();
+            request.addEventListener('load', function () {
+                let receivedUser = JSON.parse(request.response);
+                if (receivedUser.error){
+                    if (receivedUser.error==1406){
+                        M.toast({html: 'Username soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
                     }
-                });
-            });            
+                }
+                // Disable change user input
+                document.getElementById(userid + "_usernameChange").style.display = "inline";
+                userBlock.innerHTML = "<span>" + changeUsernameField.value + "</span>";
+                // Change user in select
+                userSelects = Array.from(document.getElementsByClassName("browser-default"));
+                userSelects.forEach(userSelect => {
+                    options = Array.from(userSelect.getElementsByTagName("option"));
+                    options.forEach(option => {
+                        if(option.value == userid){
+                            option.innerText = changeUsernameField.value.trim();
+                        }
+                    });
+                });          
+            });
+            request.send(user);  
         }
     }
 
@@ -303,6 +318,12 @@
             request.addEventListener('load', function () {
                 // Create request
                 let receivedProject = JSON.parse(request.response);
+                if (receivedProject.error){
+                    if (receivedProject.error==1406){
+                        M.toast({html: 'Projectname soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                }
                 // Add project html
                 document.getElementById("newProjectRow").insertAdjacentHTML('beforebegin', `
             <tr id = "${receivedProject.insertId}_project">
@@ -364,12 +385,12 @@
                 </td>
             </tr>`);
             updateSelects()
-            });
-            request.send(project);
             // Disable project add field
             document.getElementById("add_user_field").style.display = "none";
             document.querySelector("#add_user").style.display = "inline";
             document.getElementById("newProjectRow").style.display = "none";
+            });
+            request.send(project);
         })
 
     // delete project
@@ -407,10 +428,20 @@
                 'Content-Type',
                 'application/json'
             )
+            request.addEventListener('load', function () {
+                // Create request
+                let receivedProject = JSON.parse(request.response);
+                if (receivedProject.error){
+                    if (receivedProject.error==1406){
+                        M.toast({html: 'Projectname soo long. Max Length 45 symbol.', classes: 'rounded'});
+                        return    
+                    }
+                }
+                // Create project name field on projectname span
+                document.getElementById(projectid + "_projectnameChange").style.display = "inline"
+                projectBlock.innerHTML = "<span>" + changeProjectnameField.value + "</span>"
+            })
             request.send(project)
-            // Create project name field on projectname span
-            document.getElementById(projectid + "_projectnameChange").style.display = "inline"
-            projectBlock.innerHTML = "<span>" + changeProjectnameField.value + "</span>"
         }
     }
     // Change user select in project 
@@ -436,6 +467,10 @@
             })
         })
     }
+
+    function checkError (){
+
+    }
     updateSelects();
 </script>
 <style>
@@ -449,6 +484,9 @@
 }
 .user {
     padding: 5px;
+}
+.toast {
+    background-color: #F44336; 
 }
 </style>
 <html>
